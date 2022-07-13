@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.NoticeDao">
+	
+	<select id="findNotice" parameterType="notice" resultType="notice">
+		select id,title,content,time from notice order by time desc
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countNotice" parameterType="notice" resultType="int">
+		select count(*)  from notice 
+	</select>
+	
+	<insert id="addNotice" parameterType="notice" >
+		insert notice(title,content,time) 
+		values (#{title},#{content},#{time})
+	</insert>
+	
+	<update id="updateNotice" parameterType="notice">
+    	update notice set
+    	<trim suffixOverrides=",">
+			<if test="title!=null">title=#{title},</if>
+			<if test="content!=null">content=#{content},</if>
+			<if test="time!=null">time=#{time},</if>
+		</trim>
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	<delete id="deleteNotice" parameterType="Integer">
+		delete from notice <where>id=#{id}</where>
+	</delete>
+	
+	<select id="findOneNotice" resultType="notice">
+		select id,title,content,time from notice  <where>id=#{id}</where>
+	</select>
+	
+	
+	
+</mapper>

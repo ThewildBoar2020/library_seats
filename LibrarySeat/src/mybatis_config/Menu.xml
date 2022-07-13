@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menu">
+	
+	<select id="findMenu" parameterType="menu" resultType="menu">
+		select menuId,menuName,menuUrl,parentId,menuDescription,state,iconCls,seq from menu where 1 = 1
+		<if test="menuName != null and '' != menuName">  
+            <![CDATA[  
+              AND menuName like '%' #{menuName} '%'  
+            ]]>  
+        </if>
+        <if test="parentId != null and '' != parentId">  
+            <![CDATA[  
+              AND parentId = #{parentId} 
+            ]]>  
+        </if>
+        order by seq
+	</select>
+	
+	
+
+	<select id="countMenu" parameterType="menu" resultType="int">
+		select count(*) from menu  where 1 = 1
+		<if test="menuName != null and '' != menuName">  
+            <![CDATA[  
+              AND menuName like '%' #{menuName} '%'  
+            ]]>  
+        </if>
+        <if test="parentId != null and '' != parentId">  
+            <![CDATA[  
+              AND parentId = #{parentId} 
+            ]]>  
+        </if>
+	</select>
+	
+	
+	<select id="menuTree" parameterType="Map" resultType="menu">
+		select menuId,menuName,menuUrl,parentId,menuDescription,state,iconCls,seq from menu
+		where parentId = #{parentId} and menuId in
+		 <foreach collection="menuIds" item='item' open="(" separator="," close=")">
+		 	#{item}
+		 </foreach>
+		 order by seq
+	</select>
+	
+	
+	<insert id="addMenu" parameterType="menu">
+		insert into menu(menuName,menuUrl,parentId,menuDescription,state,iconCls,seq) 
+			values(#{menuName},#{menuUrl},#{parentId},#{menuDescription},'open',#{iconCls},#{seq})
+	</insert>
+	
+	
+	<update id="updateMenu" parameterType="menu">
+		update menu set
+    	<trim suffixOverrides=",">
+			<if test="menuName!=null">menuName=#{menuName},</if>
+			<if test="menuUrl!=null">menuUrl=#{menuUrl},</if>
+			<if test="menuDescription!=null">menuDescription=#{menuDescription},</if>
+			<if test="state!=null">state=#{state},</if>
+			<if test="iconCls!=null">iconCls=#{iconCls},</if>
+			<if test="seq!=null">seq=#{seq},</if>
+		</trim>
+		<where>menuId=#{menuId}</where>
+	</update>
+	
+	
+	<delete id="deleteMenu" parameterType="Integer">
+		delete from menu where menuId = #{menuId}
+	</delete>
+	
+</mapper>

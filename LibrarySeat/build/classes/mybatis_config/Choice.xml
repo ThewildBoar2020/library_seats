@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.ChoiceDao">
+	
+	<select id="findChoice" parameterType="choice" resultType="choice">
+		select id,studentno,seatkeyword,time,status from choice where 1 =1 
+		<if test="studentno != null and '' != studentno">  
+            <![CDATA[  
+              and studentno = #{studentno}  
+            ]]>  
+        </if>
+        <if test="status != null and '' != status">  
+            <![CDATA[  
+              and status = #{status}  
+            ]]>  
+        </if>
+        <if test="start != null and '' != start">  
+            <![CDATA[  
+              and time >= #{start}  
+            ]]>  
+        </if>
+        <if test="end != null and '' != end">  
+            <![CDATA[  
+              and time <= #{end}  
+            ]]>  
+        </if>
+        order by time desc
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countChoice" parameterType="choice" resultType="int">
+		select count(*) from choice where 1 =1 
+		<if test="studentno != null and '' != studentno">  
+            <![CDATA[  
+              and studentno = #{studentno}  
+            ]]>  
+        </if>
+        <if test="status != null and '' != status">  
+            <![CDATA[  
+              and status = #{status}  
+            ]]>  
+        </if>
+        <if test="start != null and '' != start">  
+            <![CDATA[  
+              and time >= #{start}  
+            ]]>  
+        </if>
+        <if test="end != null and '' != end">  
+            <![CDATA[  
+              and time <= #{end}  
+            ]]>  
+        </if>
+	</select>
+	
+	<insert id="addChoice" parameterType="choice" >
+		insert choice(studentno,time,seatkeyword) 
+		values (#{studentno},#{time},#{seatkeyword})
+	</insert>
+	
+	<update id="modifyChoice" parameterType="choice">
+		  <![CDATA[  
+            	update choice set status = '1' where time <= #{time}
+           ]]> 
+    </update>
+	
+	
+	<delete id="deletechoice" parameterType="Integer">
+		delete from choice <where>id=#{id}</where>
+	</delete>
+	
+
+	<select id="findOneChoice" resultType="choice">
+		SELECT id,studentno,seatkeyword,time,status FROM choice WHERE LEFT(seatkeyword,20) = #{seatkeyword} AND studentno = #{studentno} and STATUS = '0' 
+	</select>
+	
+	<delete id="cancelChoice" parameterType="choice"> 
+		DELETE FROM choice WHERE LEFT(seatkeyword,20) = #{seatkeyword} AND studentno = #{studentno} 
+	</delete>
+	
+	
+	
+	<select id="findFriend" resultType="choice">
+		SELECT 
+			COUNT(studentno) AS total,
+			studentno 
+		FROM 
+			choice  
+		WHERE  LEFT(RIGHT(seatkeyword,13),9) = #{seatkeyword} 
+			AND time > #{time} 
+		GROUP BY studentno 
+		HAVING  studentno!= #{studentno} 
+			AND total >= #{pipeishu} 
+		ORDER BY total DESC
+	</select>
+	
+	<!-- rows来临时存储roomid -->
+	<select id="count" resultType="int">
+		 <![CDATA[  
+		 	select count(*) from choice where RIGHT(LEFT(seatkeyword,20),1) = #{rows} and time >= #{start} and time <= #{end}
+		]]>	
+	</select>
+	
+	
+</mapper>

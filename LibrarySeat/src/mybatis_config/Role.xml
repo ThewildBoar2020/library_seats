@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="role">
+	
+	<select id="findRole" parameterType="role" resultType="role">
+		select roleId,roleName,menuIds,operationIds,roleDescription from role where 1 = 1
+		<if test="roleName != null and '' != roleName">  
+            <![CDATA[  
+              AND roleName like '%' #{roleName} '%'  
+            ]]>  
+        </if>
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countRole" parameterType="role" resultType="int">
+		select count(*) from role  where 1 = 1
+		<if test="roleName != null and '' != roleName">  
+            <![CDATA[  
+              AND roleName like '%' #{roleName} '%'  
+            ]]>  
+        </if>
+	</select>
+	
+	<select id="findOneRole" parameterType="Integer" resultType="role">
+		select roleId,roleName,menuIds,operationIds,roleDescription from role
+		<where>roleId=#{roleId}</where>
+	</select>
+	
+	<insert id="addRole" parameterType="role" >
+		insert role(roleName,roleDescription) 
+		values (#{roleName},#{roleDescription})
+	</insert>
+	
+	<update id="updateRole" parameterType="role">
+    	update role set
+    	<trim suffixOverrides=",">
+			<if test="roleName!=null">roleName=#{roleName},</if>
+			<if test="menuIds!=null">menuIds=#{menuIds},</if>
+			<if test="operationIds!=null">operationIds=#{operationIds},</if>
+			<if test="roleDescription!=null">roleDescription=#{roleDescription},</if>
+		</trim>
+		<where>roleId=#{roleId}</where>
+    </update>
+	
+	
+	<delete id="deleteRole" parameterType="Integer">
+		delete from role 
+		<where>roleId=#{roleId}</where>
+	</delete>
+	
+	<delete id="deleteRoleByRoleIds" parameterType="Map">
+		delete from role where roleId in
+		 <foreach collection="roleIds" item='item' open="(" separator="," close=")">
+		 	#{item}
+		 </foreach>
+	</delete>
+	
+	<select id="existRoleWithRoleName" parameterType="String" resultType="role">
+		select roleId,roleName,menuIds,roleDescription from role where roleName=#{roleName} 
+	</select>
+</mapper>

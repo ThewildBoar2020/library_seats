@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.RoomDao">
+	
+	<select id="findRoom" parameterType="room" resultType="room">
+		select 
+			a.id as id,
+			a.name as name,
+			a.typeid as typeid,
+			a.row as row,
+			a.col as col,
+			b.name as typename,
+			a.total as total
+		from room a left join type b on a.typeid = b.id
+        <if test="typeid!=null and ''!=typeid">  
+            <![CDATA[  
+             where a.typeid = #{typeid}  
+            ]]>  
+        </if>
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countRoom" parameterType="room" resultType="int">
+		select 
+			count(*)
+		from room a left join type b on a.typeid = b.id
+        <if test="typeid!=null and ''!=typeid">  
+            <![CDATA[  
+             where a.typeid = #{typeid}  
+            ]]>  
+        </if>
+	</select>
+	
+	<insert id="addRoom" parameterType="room" >
+		insert room(typeid,name,row,col,total) 
+		values (#{typeid},#{name},#{row},#{col},#{total})
+	</insert>
+	
+	<update id="updateRoom" parameterType="room">
+    	update room set
+    	<trim suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="typeid!=null">typeid=#{typeid},</if>
+			<if test="row!=null">row=#{row},</if>
+			<if test="col!=null">col=#{col},</if>
+			<if test="total!=null">total=#{total},</if>
+		</trim>
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	<delete id="deleteRoom" parameterType="Integer">
+		delete from room <where>id=#{id}</where>
+	</delete>
+	
+
+	<select id="findScoreByRoomid" resultType="int">
+		select 
+			b.score as score
+		from room a left join type b on a.typeid = b.id
+        where a.id = #{roomid}
+	</select>
+	
+	
+</mapper>

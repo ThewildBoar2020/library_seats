@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.TypeDao">
+	
+	<select id="findType" parameterType="type" resultType="type">
+		select id,name,score from type
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countType" parameterType="type" resultType="int">
+		select count(*)  from type 
+	</select>
+	
+	<insert id="addType" parameterType="type" >
+		insert type(name,score) 
+		values (#{name},#{score})
+	</insert>
+	
+	<update id="updateType" parameterType="type">
+    	update type set
+    	<trim suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="score!=null">score=#{score},</if>
+		</trim>
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	<delete id="deleteType" parameterType="Integer">
+		delete from type <where>id=#{id}</where>
+	</delete>
+	
+
+	
+	
+	
+</mapper>

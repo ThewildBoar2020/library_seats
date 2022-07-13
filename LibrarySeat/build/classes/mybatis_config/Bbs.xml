@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.BbsDao">
+	
+	<select id="findBbs" parameterType="bbs" resultType="bbs">
+		select id,title,author,time,reply,lastreply,lastreplytime from bbs where 1 =1 
+		<if test="title != null and '' != title">  
+            <![CDATA[  
+              and title like '%' #{title} '%'  
+            ]]>  
+        </if>
+        <if test="author != null and '' != author">  
+            <![CDATA[  
+              and author like '%' #{author} '%'  
+            ]]>  
+        </if>
+        order by time desc
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countBbs" parameterType="bbs" resultType="int">
+		select count(*) from bbs where 1 =1 
+		<if test="title != null and '' != title">  
+            <![CDATA[  
+              and title like '%' #{title} '%'  
+            ]]>  
+        </if>
+        <if test="author != null and '' != author">  
+            <![CDATA[  
+              and author like '%' #{author} '%'  
+            ]]>  
+        </if>
+	</select>
+	
+	
+	<insert id="addBbs" parameterType="bbs" useGeneratedKeys="true" keyProperty="id">
+		insert bbs(title,author,time,reply,lastreply,lastreplytime) 
+		values (#{title},#{author},#{time},1,#{author},#{time})
+	</insert>
+	
+	<update id="updateBbstitle" parameterType="bbs">
+		update bbs set title = #{title} where id = #{id}
+    </update>
+	
+	<update id="updateBbslast" parameterType="bbs">
+		update bbs set reply = reply + 1,lastreply = #{lastreply},lastreplytime = #{lastreplytime} where id = #{id}
+	</update>
+	
+	<delete id="deleteBbs" parameterType="Integer">
+		delete from bbs <where>id=#{id}</where>
+	</delete>
+	
+	<select id="findOneBbs"   resultType="bbs">
+		select id,title,author,time,reply,lastreply,lastreplytime from bbs where id = #{id}
+	</select>
+	
+</mapper>

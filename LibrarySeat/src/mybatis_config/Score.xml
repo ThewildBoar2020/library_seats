@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.ScoreDao">
+	
+	<select id="findScore" parameterType="score" resultType="score">
+		select id,studentno,studentname,total from score where 1 = 1
+		<if test="studentno != null and '' != studentno">  
+            <![CDATA[  
+              AND studentno like '%' #{studentno} '%'  
+            ]]>  
+        </if>
+        <if test="studentname != null and '' != studentname">  
+            <![CDATA[  
+              AND studentname like '%' #{studentname} '%'  
+            ]]>  
+        </if>
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countScore" parameterType="score" resultType="int">
+		select count(*)  from score where 1 = 1
+		<if test="studentno != null and '' != studentno">  
+            <![CDATA[  
+              AND studentno like '%' #{studentno} '%'  
+            ]]>  
+        </if>
+        <if test="studentname != null and '' != studentname">  
+            <![CDATA[  
+              AND studentname like '%' #{studentname} '%'  
+            ]]>  
+        </if>
+	</select>
+	
+	<select id="findOneScore" resultType="score">
+		select id,studentno,studentname,total from score where studentno = #{studentno}
+	</select>
+	
+	<insert id="addScore" parameterType="score" >
+		insert score(studentno,studentname,total) 
+		values (#{studentno},#{studentname},#{total})
+	</insert>
+	
+	<update id="updateScore" parameterType="score">
+    	update score set total = #{total}
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	
+	<delete id="deleteScore" parameterType="Integer">
+		delete from score <where>id=#{id}</where>
+	</delete>
+	
+
+	<delete id="deleteOneScore">
+		delete from score <where>studentno=#{studentno}</where>
+	</delete>
+	
+	
+</mapper>

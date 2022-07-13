@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.ClazzDao">
+	
+	<select id="findClazz" parameterType="clazz" resultType="clazz">
+		select a.id,a.name as name,xueyuan,zhuanye,teacherno,a.teacherno,b.name as teachername  
+		from clazz a left join teacher b on a.teacherno = b.no 
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countClazz" parameterType="clazz" resultType="int">
+		select count(*)  
+		from clazz a left join teacher b on a.teacherno = b.no 
+	</select>
+	
+	<insert id="addClazz" parameterType="clazz" >
+		insert clazz(name,xueyuan,zhuanye,teacherno) 
+		values (#{name},#{xueyuan},#{zhuanye},#{teacherno})
+	</insert>
+	
+	<update id="updateClazz" parameterType="clazz">
+    	update clazz set
+    	<trim suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="xueyuan!=null">xueyuan=#{xueyuan},</if>
+			<if test="zhuanye!=null">zhuanye=#{zhuanye},</if>
+			<if test="teacherno!=null">teacherno=#{teacherno},</if>
+		</trim>
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	<delete id="deleteClazz" parameterType="Integer">
+		delete from clazz <where>id=#{id}</where>
+	</delete>
+	
+
+	
+	
+	
+</mapper>

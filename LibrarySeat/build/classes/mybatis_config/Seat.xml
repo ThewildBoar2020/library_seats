@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.SeatDao">
+
+	<select id="findSeat" resultType="seat">
+		select 
+			a.id as id,
+			a.roomid as roomid,
+			b.name as roomname,
+			a.studentno as studentno,
+			a.col as col,
+			a.row as row,
+			a.time as time,
+			a.date as date,
+			a.keyword as keyword
+		from seat a join room b on a.roomid = b.id 
+		where 1 = 1 
+		<if test="studentno!=null and ''!=studentno">  
+            <![CDATA[  
+             and a.studentno = #{studentno}  
+            ]]>  
+        </if>
+        <if test="time!=null and ''!=time">  
+            <![CDATA[  
+             and a.time = #{time}  
+            ]]>  
+        </if>
+         <if test="date!=null and ''!=date">  
+            <![CDATA[  
+             and a.date = #{date}  
+            ]]>  
+        </if>
+        <if test="roomid!=null and ''!=roomid">  
+            <![CDATA[  
+             and a.roomid = #{roomid}  
+            ]]>  
+        </if>
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>	
+	</select>
+	
+	
+	
+	<select id="countSeat">
+		select 
+			count(*)
+		from seat a join room b on a.roomid = b.id
+			left join student c on a.studentno = c.no
+		where 1 = 1 
+		<if test="studentno!=null and ''!=studentno">  
+            <![CDATA[  
+             and a.studentno = #{studentno}  
+            ]]>  
+        </if>
+        <if test="time!=null and ''!=time">  
+            <![CDATA[  
+             and a.time = #{time}  
+            ]]>  
+        </if>
+        <if test="date!=null and ''!=date">  
+            <![CDATA[  
+             and a.date = #{date}  
+            ]]>  
+        </if>
+        <if test="roomid!=null and ''!=roomid">  
+            <![CDATA[  
+             and a.roomid = #{roomid}  
+            ]]>  
+        </if>
+	</select>
+	
+	
+	<insert id="insertSeat">
+		insert into seat(roomid,row,col,studentno,time,date,keyword) values (#{roomid},#{row},#{col},1,#{time},#{date},#{keyword})
+	</insert>
+	
+	<update id="occupySeat">
+		update seat set studentno = #{studentno} where keyword = #{keyword}
+	</update>
+
+	<update id="cancelSeat">
+		update seat set studentno = '1' where keyword = #{keyword}
+	</update>
+
+
+	<select id="findBlock" parameterType="seat" resultType="int">
+		select count(*) from seat where roomid = #{roomid} and time = #{time} and date = #{date} and studentno = '1'
+	</select>
+</mapper>

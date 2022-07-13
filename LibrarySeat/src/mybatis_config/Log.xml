@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="log">
+	<insert id="insertLog" parameterType="log">
+		insert into log(userName,createTime,content,operation,ip,module) 
+		values (#{userName},#{createTime},#{content},#{operation},#{ip},#{module});
+	</insert>
+	
+	<select id="findLog" parameterType="log" resultType="log">
+		select logId,userName,createTime,operation,ip,module,content from log where 1 = 1
+		<if test="userName != null and '' != userName">  
+            <![CDATA[  
+              AND userName like '%' #{userName} '%'  
+            ]]>  
+        </if>
+        <if test="operation != null and '' != operation">  
+            <![CDATA[  
+              AND operation like '%' #{operation} '%'  
+            ]]>  
+        </if>
+        <if test="module != null and '' != module">  
+            <![CDATA[  
+              AND module like '%' #{module} '%'  
+            ]]>  
+        </if>
+        <if test="start != null and '' != start">
+        	<![CDATA[
+        		AND createTime >= #{start}
+        	]]>
+        </if>
+        <if test="end != null and '' != end">
+        	<![CDATA[
+        		AND createTime <= #{end}
+        	]]>
+        </if>
+        ORDER BY logId DESC 
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countLog" parameterType="log" resultType="int">
+		select count(*) from log where 1 = 1
+		<if test="userName != null and '' != userName">  
+            <![CDATA[  
+              AND userName like '%' #{userName} '%'  
+            ]]>  
+        </if>
+        <if test="operation != null and '' != operation">  
+            <![CDATA[  
+              AND operation like '%' #{operation} '%'  
+            ]]>  
+        </if>
+        <if test="module != null and '' != module">  
+            <![CDATA[  
+              AND module like '%' #{module} '%'  
+            ]]>  
+        </if>
+        <if test="start != null and '' != start">
+        	<![CDATA[
+        		AND createTime >= #{start}
+        	]]>
+        </if>
+        <if test="end != null and '' != end">
+        	<![CDATA[
+        		AND createTime <= #{end}
+        	]]>
+        </if>
+	</select>
+
+	
+</mapper>

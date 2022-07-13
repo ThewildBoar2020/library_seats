@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.StudentDao">
+	
+	<select id="findStudent" parameterType="student" resultType="student">
+		select 
+			a.id as id,
+			a.name as name,
+			a.no as no,
+			a.sex as sex,
+			a.birth as birth,
+			a.phone as phone,
+			a.mail as mail,
+			a.photo as photo,
+			a.clazzid as clazzid,
+			b.name as clazzname
+		from student a left join clazz b on a.clazzid = b.id where 1 =1 
+		<if test="clazzid != null and '' != clazzid">  
+            <![CDATA[  
+             and  clazzid = #{clazzid}   
+            ]]>  
+        </if>
+        <if test="name != null and '' != name">  
+            <![CDATA[  
+              AND a.name like '%' #{name} '%'  
+            ]]>  
+        </if>
+        <if test="no!=null and ''!=no">  
+            <![CDATA[  
+              AND a.no like '%' #{no} '%'  
+            ]]>  
+        </if>
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countStudent" parameterType="student" resultType="int">
+		select 
+			count(*)
+		from student a left join clazz b on a.clazzid = b.id where 1 =1 
+		<if test="clazzid != null and '' != clazzid">  
+            <![CDATA[  
+             and  clazzid = #{clazzid}   
+            ]]>  
+        </if>
+        <if test="name != null and '' != name">  
+            <![CDATA[  
+              AND a.name like '%' #{name} '%'  
+            ]]>  
+        </if>
+        <if test="no!=null and ''!=no">  
+            <![CDATA[  
+              AND a.no like '%' #{no} '%'  
+            ]]>  
+        </if>
+	</select>
+	
+	<insert id="addStudent" parameterType="student" >
+		insert student(no,name,sex,clazzid,birth,phone,mail,photo) 
+		values (#{no},#{name},#{sex},#{clazzid},#{birth},#{phone},#{mail},#{photo})
+	</insert>
+	
+	<update id="updateStudent" parameterType="student">
+    	update student set
+    	<trim suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="no!=null">no=#{no},</if>
+			<if test="sex!=null">sex=#{sex},</if>
+			<if test="clazzid!=null">clazzid=#{clazzid},</if>
+			<if test="birth!=null">birth=#{birth},</if>
+			<if test="phone!=null">phone=#{phone},</if>
+			<if test="mail!=null">mail=#{mail},</if>
+			<if test="phone!=null">phone=#{phone},</if>
+		</trim>
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	<delete id="deleteStudent" parameterType="Integer">
+		delete from student <where>id=#{id}</where>
+	</delete>
+	
+
+	<select id="findOneStudentByno" resultType="student">
+		select 
+			a.id as id,
+			a.name as name,
+			a.no as no,
+			a.sex as sex,
+			a.birth as birth,
+			a.phone as phone,
+			a.mail as mail,
+			a.photo as photo,
+			a.clazzid as clazzid,
+			b.name as clazzname
+		from student a left join clazz b on a.clazzid = b.id where a.no = #{no} 
+	
+	</select>
+	
+	
+</mapper>

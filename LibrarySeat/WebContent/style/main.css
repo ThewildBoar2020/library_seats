@@ -1,0 +1,14 @@
+/**上下间隔  如各模块主页中的搜索框和数据表格之间  */
+.updownInterval{   
+	height:3px;
+}
+
+/**文本框点击去掉外边框 */
+*:focus { outline: none; }
+
+/**必填项样式   去掉三角形警告，去掉红框 */
+.validatebox-invalid {
+  background-image: url('images/validatebox_warning.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+}

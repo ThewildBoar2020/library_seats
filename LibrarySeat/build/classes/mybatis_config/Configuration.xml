@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	
+	<typeAliases>
+		<!-- 系统管理 -->
+		<typeAlias type="dingzhen.entity.User" alias="user" />
+		<typeAlias type="dingzhen.entity.Menu" alias="menu" />
+		<typeAlias type="dingzhen.entity.Role" alias="role" />
+		<typeAlias type="dingzhen.entity.Log" alias="log" />
+		<typeAlias type="dingzhen.entity.Operation" alias="operation" />
+		
+		<!-- 信息管理 -->
+		<typeAlias type="dingzhen.entity.Teacher" alias="teacher" />
+		<typeAlias type="dingzhen.entity.Clazz"   alias="clazz" />
+		<typeAlias type="dingzhen.entity.Student"   alias="student" />
+		
+		
+		<!-- 阅览室管理 -->
+		<typeAlias type="dingzhen.entity.Type" alias="type" />
+		<typeAlias type="dingzhen.entity.Room" alias="room" />
+		
+		<!-- 座位管理 -->
+		<typeAlias type="dingzhen.entity.Seat" alias="seat" />
+		<typeAlias type="dingzhen.entity.Choice" alias="choice" />
+		
+		<!-- 信用积分积分 -->
+		<typeAlias type="dingzhen.entity.Score" alias="score"/>
+		<typeAlias type="dingzhen.entity.Illegal" alias="illegal"/>
+		
+		<!-- 通知交流 -->
+		<typeAlias type="dingzhen.entity.Notice" alias="notice"/>
+		<typeAlias type="dingzhen.entity.Bbs"    alias="bbs"/>
+		<typeAlias type="dingzhen.entity.Topic"    alias="topic"/>
+		
+		<!-- 推荐书籍 -->
+		<typeAlias type="dingzhen.entity.Book"    alias="book"/>
+	</typeAliases>
+
+		
+	<mappers>
+		<!-- 系统管理 -->
+		<mapper resource="./mybatis_config/User.xml" />
+		<mapper resource="./mybatis_config/Menu.xml" />
+		<mapper resource="./mybatis_config/Role.xml" />
+		<mapper resource="./mybatis_config/Log.xml" />
+		<mapper resource="./mybatis_config/Operation.xml" />
+		
+		<!-- 信息管理 -->
+		<mapper resource="./mybatis_config/Teacher.xml" />
+		<mapper resource="./mybatis_config/Clazz.xml" />
+		<mapper resource="./mybatis_config/Student.xml" />
+		
+		
+		<!-- 阅览室管理 -->
+		<mapper resource="./mybatis_config/Type.xml" />
+		<mapper resource="./mybatis_config/Room.xml" />
+		
+		<!-- 座位管理 -->
+		<mapper resource="./mybatis_config/Seat.xml" />
+		<mapper resource="./mybatis_config/Choice.xml" />
+		
+		<!-- 信用积分积分 -->
+		<mapper resource="./mybatis_config/Score.xml"/>
+		<mapper resource="./mybatis_config/Illegal.xml"/>
+		
+		<!-- 通知交流 -->
+		<mapper resource="./mybatis_config/Notice.xml"/>
+		<mapper resource="./mybatis_config/Bbs.xml"/>
+		<mapper resource="./mybatis_config/Topic.xml"/>
+		
+		<!-- 推荐书籍 -->
+		<mapper resource="./mybatis_config/Book.xml"/>
+		
+	</mappers>
+	 
+</configuration>

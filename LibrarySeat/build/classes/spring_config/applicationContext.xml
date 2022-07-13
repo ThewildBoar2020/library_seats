@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:mvc="http://www.springframework.org/schema/mvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:jee="http://www.springframework.org/schema/jee"
+     xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-tx-3.0.xsd"
+	default-autowire="byType">
+	
+	
+	
+	
+	
+<!-- 自动扫描组件，这里要把controler下面的 controller去除，他们是在spring3-servlet.xml中配置的，如果不去除会影响事务管理的。   -->  
+ <context:component-scan base-package="dingzhen">  
+       
+ </context:component-scan> 
+	
+	<!--<import resource="applicationContext-bean.xml"/>
+
+	--><!-- ============================== 数据库配置 ==================================== -->
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+ <property name="locations">
+            <list>
+                <value>classpath*:config.properties</value>
+                </list>
+ </property>
+</bean>
+	<!-- 数据源配置 -->
+	<bean name="dataSource"	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"><value>${DRIVER}</value></property>
+		<property name="url"><value>${URL}</value></property>
+		<property name="username"><value>${USERNAME}</value></property>
+		<property name="password"><value>${PWS}</value></property>
+	</bean>
+	
+	
+	
+	<!-- ================================ MyBatis SqlSession配置 ========================================= -->
+	<!-- 使用SqlSessionFactoryBean工厂产生SqlSession对象，方便后期注入Dao -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis_config/Configuration.xml"></property>
+	</bean>
+	
+	<bean class="org.mybatis.spring.annotation.MapperScannerPostProcessor">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="dingzhen.dao" />
+	</bean>
+	
+	<!-- 开启事务注解驱动 -->
+  	<tx:annotation-driven />
+  	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+  	<bean id="transactionManager"
+    	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource" />
+  	</bean>	
+
+  <!-- ********************************定义AOP切面******************************** -->
+    <aop:aspectj-autoproxy />
+	<!-- 自动装载aop -->
+	<bean id="logAspect" class="dingzhen.aop.LogAspect"/><!-- 切面定义（采用注解的方式定义及使用） -->
+</beans>

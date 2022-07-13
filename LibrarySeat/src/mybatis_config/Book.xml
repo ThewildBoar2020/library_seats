@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dingzhen.dao.BookDao">
+	
+	<select id="findBook" parameterType="book" resultType="book">
+		select id,name,author,publish,cover,remarks from book order by id desc
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countBook" parameterType="book" resultType="int">
+		select count(*) from book 
+	</select>
+	
+	<select id="findOneBook" parameterType="Integer" resultType="book">
+		select id,name,author,publish,cover,remarks from book 
+		<where>id=#{id}</where>
+	</select>
+	
+	<insert id="addBook" parameterType="book" >
+		insert Book(name,author,publish,cover,remarks) 
+		values (#{name},#{author},#{publish},#{cover},#{remarks})
+	</insert>
+	
+	<update id="updateBook" parameterType="book">
+    	update book set
+    	<trim suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="author!=null">author=#{author},</if>
+			<if test="publish!=null">publish=#{publish},</if>
+			<if test="cover!=null">cover=#{cover},</if>
+			<if test="remarks!=null">remarks=#{remarks},</if>
+		</trim>
+		<where>id=#{id}</where>
+    </update>
+	
+	
+	<delete id="deleteBook" parameterType="Integer">
+		delete from book <where>id=#{id}</where>
+	</delete>
+	
+
+	
+	
+	
+</mapper>
